@@ -1,0 +1,86 @@
+# NOTE: update this with your service name
+service: page-analysis
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+
+# serverless-webpack configuration
+# Enable auto-packing of external modules
+custom:
+  stage: v1
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  dynamodb:  
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  profile: mofa
+  region: ap-northeast-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource:
+        - "arn:aws:dynamodb:*:*"
+  # To load environment variables externally
+  # rename env.example to env.yml and uncomment
+  # the following line. Also, make sure to not
+  # commit your env.yml.
+  #
+  #environment: ${file(env.yml):${self:provider.stage}}
+
+functions:
+  getFromDb:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: GET
+          path: db/fb/page/{id}
+          cors: true
+  getFbPageById:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: GET
+          path: fb/page/{id}
+          cors: true
+  saveFbPage:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: POST
+          path: fb/page/{id}
+          cors: true
+  updateFbPageDailyCount:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: PUT
+          path: fb/page/{id}/newCount
+          cors: true
+  updateAllFbPageDailyCount:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: PUT
+          path: fb/pages/newCount
+          cors: true
+  listAllFbPages:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: GET
+          path: db/fb/pages/listAll
+          cors: true
+resources:
+  Resources: ${file(offline/migrations/tables.yml)}
