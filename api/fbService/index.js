@@ -131,7 +131,7 @@ export default class fbService {
   	
   }
 
-  async updateAllFbPageDailyCount() {
+  updateAllFbPageDailyCount() {
   	return new Promise(async (resolve, reject) => {
   		try {
   			const dbData = await this.listAll(fbPage)
@@ -148,7 +148,7 @@ export default class fbService {
   	})
   }
 
-  async updateFbPageDailyCount(id) {
+  updateFbPageDailyCount(id) {
   	return new Promise(async (resolve, reject) => {
   		try {
   			const page = await this.getFbPageById(id)
@@ -185,7 +185,7 @@ export default class fbService {
 
   }
 
-  async saveFbPage(id) {
+  saveFbPage(id) {
   	return new Promise(async (resolve, reject) => {
   		try {
 	  		let page = await this.getFbPageById(id)
