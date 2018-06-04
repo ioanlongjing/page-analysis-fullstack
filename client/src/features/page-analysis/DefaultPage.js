@@ -6,6 +6,21 @@ import * as actions from './redux/actions';
 import { Tabs, Tab } from 'react-bootstrap';
 import DataTable from './DataTable';
 
+// {
+//   "success": false,
+//   "payload": null,
+//   "error": {
+//     "type": "ERROR_FB_FIND_PAGE",
+//     "message": {
+//       "message": "(#4) Application request limit reached",
+//       "type": "OAuthException",
+//       "is_transient": true,
+//       "code": 4,
+//       "fbtrace_id": "G8ZgrH94hzh"
+//     }
+//   }
+// }
+
 export class DefaultPage extends Component {
   constructor(props, context) {
     super(props, context);

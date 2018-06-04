@@ -40,6 +40,13 @@ provider:
   #environment: ${file(env.yml):${self:provider.stage}}
 
 functions:
+  signin:
+    handler: basic_handler.router
+    events:
+      - http:
+          method: GET
+          path: signin/{email}
+          cors: true
   getFromDb:
     handler: fb_handler.router
     events:
