@@ -1,4 +1,4 @@
-import fbService, {fbPage} from './fbService'
+import fbService, {fbPage} from './services/fbService'
 import {success, failure} from './lib/response-lib'
 
 exports.router = async (event) => {
@@ -34,16 +34,10 @@ exports.router = async (event) => {
 			console.log(e)
 			return failure(e)
 		}
-	} else if (event.resource === '/fb/page/{id}' && event.httpMethod === 'POST') {
-		if (!checkIdExists(event)) {
-			return failure({
-				type: "ERROR_MISSING_FB_ID"
-			})
-		} else {
-			id = event.pathParameters.id
-		}
+	} else if (event.resource === '/fb/page' && event.httpMethod === 'POST') {
+		const body = JSON.parse(event.body)
 		try {
-			const page = await FB.saveFbPage(id)
+			const page = await FB.saveFbPage({id: body.id, userEmail: body.userEmail})
 			return success(page)
 		} catch (e) {
 			console.log(e)
@@ -72,10 +66,10 @@ exports.router = async (event) => {
 			console.log(e)
 			return failure(e)
 		}
-	} else if (event.resource === '/db/fb/pages/listAll' && event.httpMethod === 'GET') {
-
+	} else if (event.resource === '/db/fb/pages/listAll/{email}' && event.httpMethod === 'GET') {
+		const email = event.pathParameters.email
 		try {
-			const pages = await FB.listAll(fbPage)
+			const pages = await FB.dbService.listAllByHash(fbPage, unescape(email))
 			console.log(pages)
 			return success(pages)
 		} catch (e) {

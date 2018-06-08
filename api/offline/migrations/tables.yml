@@ -4,11 +4,15 @@ fbPageTable:
   Properties:
     TableName: fb-page
     AttributeDefinitions:
+      - AttributeName: userEmail
+        AttributeType: S
       - AttributeName: id
         AttributeType: S
     KeySchema:
-      - AttributeName: id
+      - AttributeName: userEmail
         KeyType: HASH
+      - AttributeName: id
+        KeyType: RANGE
     ProvisionedThroughput:
       ReadCapacityUnits: 1
       WriteCapacityUnits: 1

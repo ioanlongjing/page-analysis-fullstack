@@ -40,12 +40,19 @@ provider:
   #environment: ${file(env.yml):${self:provider.stage}}
 
 functions:
+  updateUser:
+    handler: basic_handler.router
+    events:
+      - http:
+          method: PUT
+          path: updateUser
+          cors: true
   signin:
     handler: basic_handler.router
     events:
       - http:
-          method: GET
-          path: signin/{email}
+          method: POST
+          path: signin
           cors: true
   getFromDb:
     handler: fb_handler.router
@@ -66,7 +73,7 @@ functions:
     events:
       - http:
           method: POST
-          path: fb/page/{id}
+          path: fb/page
           cors: true
   updateFbPageDailyCount:
     handler: fb_handler.router
@@ -87,7 +94,7 @@ functions:
     events:
       - http:
           method: GET
-          path: db/fb/pages/listAll
+          path: db/fb/pages/listAll/{email}
           cors: true
 resources:
   Resources: ${file(offline/migrations/tables.yml)}
