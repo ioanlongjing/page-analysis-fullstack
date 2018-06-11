@@ -25,6 +25,10 @@ export class DefaultPage extends Component {
     actions: PropTypes.object.isRequired,
   };
 
+  componentDidMount() {
+    console.log(actions)
+  }
+
   render() {
     return (
       <div>

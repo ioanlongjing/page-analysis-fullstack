@@ -85,10 +85,8 @@ export class DefaultPage extends Component {
     const userEmail = localStorage.getItem('userEmail')
     if (userEmail) {
       this.submitEmail(userEmail)
+      this.props.actions.getUserFbPages(userEmail)
     }
-    this.getUserFbPages(userEmail)
-
-    // this.props.history.push('/examples/')
   }
 
   handleModalClose() {

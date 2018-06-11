@@ -48,9 +48,8 @@ export class FbContainer extends Component {
   }
 
   facebookResponse(response) {
-    console.log(response)
-    // const user = Object.assign(this.state.user, {fbToken: response.accessToken})
-    // this.updateUser(user)
+    const user = Object.assign(this.state.user, {fbToken: response.accessToken})
+    this.updateUser(user)
   }
 
   render() {

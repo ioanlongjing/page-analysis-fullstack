@@ -1,54 +1,53 @@
 import { delay, takeLatest } from 'redux-saga';
 import { call, put } from 'redux-saga/effects';
-import axios from 'axios';
 import {
-  USER_UPDATE_USER_BEGIN,
-  USER_UPDATE_USER_SUCCESS,
-  USER_UPDATE_USER_FAILURE,
-  USER_UPDATE_USER_DISMISS_ERROR,
+  HOME_GET_FB_PAGE_BEGIN,
+  HOME_GET_FB_PAGE_SUCCESS,
+  HOME_GET_FB_PAGE_FAILURE,
+  HOME_GET_FB_PAGE_DISMISS_ERROR,
 } from './constants';
+import axios from 'axios';
 
-
-export function updateUser(data) {
+export function getFbPage(id) {
   // If need to pass args to saga, pass it with the begin action.
   return {
-    type: USER_UPDATE_USER_BEGIN,
-    data
+    type: HOME_GET_FB_PAGE_BEGIN,
+    id
   };
 }
 
-export function dismissUpdateUserError() {
+export function dismissGetFbPageError() {
   return {
-    type: USER_UPDATE_USER_DISMISS_ERROR,
+    type: HOME_GET_FB_PAGE_DISMISS_ERROR,
   };
 }
 
-
-export function updateUserApi(data) {
+export function getFbPageApi(id) {
   return axios({
-    method: 'PUT',
-    url: 'http://localhost:3000/updateUser',
-    data
+    method: 'GET',
+    url: 'http://localhost:3000/fb/page/' + id,
   })
 }
 
-// worker Saga: will be fired on USER_UPDATE_USER_BEGIN actions
-export function* doUpdateUser(action) {
+
+// worker Saga: will be fired on HOME_SUBMIT_FB_ID_BEGIN actions
+export function* doGetFbPage(action) {
   // If necessary, use argument to receive the begin action with parameters.
   let res;
   try {
     // Do Ajax call or other async request here. delay(20) is just a placeholder.
-    res = yield call(updateUserApi, action.data);
+    res = yield call(getFbPageApi, action.id);
   } catch (err) {
+    alert('cant find the page')
     yield put({
-      type: USER_UPDATE_USER_FAILURE,
+      type: HOME_GET_FB_PAGE_FAILURE,
       data: { error: err },
     });
     return;
   }
   // Dispatch success action out of try/catch so that render errors are not catched.
   yield put({
-    type: USER_UPDATE_USER_SUCCESS,
+    type: HOME_GET_FB_PAGE_SUCCESS,
     data: res.data.payload,
   });
 }
@@ -60,39 +59,39 @@ export function* doUpdateUser(action) {
   dispatched while another is already pending, that pending one is cancelled
   and only the latest one will be run.
 */
-export function* watchUpdateUser() {
-  yield takeLatest(USER_UPDATE_USER_BEGIN, doUpdateUser);
+export function* watchGetFbPage() {
+  yield takeLatest(HOME_GET_FB_PAGE_BEGIN, doGetFbPage);
 }
 
 // Redux reducer
 export function reducer(state, action) {
   switch (action.type) {
-    case USER_UPDATE_USER_BEGIN:
+    case HOME_GET_FB_PAGE_BEGIN:
       return {
         ...state,
-        updateUserPending: true,
-        updateUserError: null,
+        getFbPagePending: true,
+        getFbPageError: null,
       };
 
-    case USER_UPDATE_USER_SUCCESS:
+    case HOME_GET_FB_PAGE_SUCCESS:
       return {
         ...state,
-        updateUserPending: false,
-        updateUserError: null,
-        user: action.data
+        getFbPagePending: false,
+        getFbPageError: null,
+        fbPageDisplay: action.data
       };
 
-    case USER_UPDATE_USER_FAILURE:
+    case HOME_GET_FB_PAGE_FAILURE:
       return {
         ...state,
-        updateUserPending: false,
-        updateUserError: action.data.error,
+        getFbPagePending: false,
+        getFbPageError: action.data.error,
       };
 
-    case USER_UPDATE_USER_DISMISS_ERROR:
+    case HOME_GET_FB_PAGE_DISMISS_ERROR:
       return {
         ...state,
-        updateUserError: null,
+        getFbPageError: null,
       };
 
     default:

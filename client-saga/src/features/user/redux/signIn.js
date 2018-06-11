@@ -1,6 +1,8 @@
 import { delay, takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import axios from 'axios';
+import history from '../../../common/history';
+
 import {
   USER_SIGN_IN_BEGIN,
   USER_SIGN_IN_SUCCESS,
@@ -51,6 +53,8 @@ export function* doSignIn(action) {
     type: USER_SIGN_IN_SUCCESS,
     data: res.data.payload,
   });
+  localStorage.setItem('userEmail', res.data.payload.email)
+  history.push('/')
 }
 
 /*

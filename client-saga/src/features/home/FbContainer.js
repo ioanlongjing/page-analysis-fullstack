@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from './redux/actions';
+import * as userActions from '../user/redux/actions';
+import * as homeActions from './redux/actions';
 import { Modal, Button, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 import DataTable from './DataTable';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -34,16 +35,42 @@ export class FbContainer extends Component {
     })
   }
 
-  facebookResponse(response) {
-    console.log(response)
-    // const user = Object.assign(this.state.user, {fbToken: response.accessToken})
-    // this.updateUser(user)
+  updateUserFb(data) {
+    this.props.actions.updateUser({
+      email: localStorage.getItem('userEmail'),
+      fbId: data.id,
+      fbToken: data.accessToken
+    })
+  }
+
+  componentDidMount() {
+    this.props.actions.getAllFbPages()
   }
 
   render() {
     return (
       <div className="tab-container">
-          {this.props.user.fbToken ? (
+          <Modal show={!!this.props.home.fbPageDisplay.id} onHide={this.props.actions.removeFbPage}>
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">
+                {this.props.home.fbPageDisplay.name}
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>About:</p>
+              <p>{this.props.home.fbPageDisplay.about}</p>
+              <p>Description:</p>
+              <p>{this.props.home.fbPageDisplay.description}</p>
+              <p>Fan count:</p>
+              <p>{this.props.home.fbPageDisplay.fan_count}</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.props.actions.addFbPage}>Add</Button>
+              <Button onClick={this.props.actions.removeFbPage}>Close</Button>
+            </Modal.Footer>
+          </Modal>
+
+          {this.props.user.user.fbToken ? (
           <div>
             <FormGroup controlId='facebook'>
               <ControlLabel>Please enter Facebook page id</ControlLabel>
@@ -53,15 +80,15 @@ export class FbContainer extends Component {
                 placeholder="fb id"
                 onChange={this.handleFbIdChange.bind(this)}
               />
-              <Button onClick={this.props.actions.submitFbId(this.state.fbid)}>Submit</Button>         
+              <Button onClick={this.props.actions.getFbPage.bind(null, this.state.fbid)}>Submit</Button>         
             </FormGroup>
-            <DataTable />
+            <DataTable setReorder={this.props.actions.setReorder} pages={this.props.home.pages} />
           </div>
           ) : (
             <FacebookLogin
               appId="1101264780014195"
               autoLoad
-              callback={this.props.actions.updateUser}
+              callback={this.updateUserFb.bind(this)}
               render={renderProps => (
                 <button onClick={renderProps.onClick}>This is my custom FB button</button>
               )}
@@ -83,7 +110,7 @@ function mapStateToProps(state) {
 /* istanbul ignore next */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ ...actions }, dispatch)
+    actions: bindActionCreators({ ...userActions, ...homeActions }, dispatch)
   };
 }
 

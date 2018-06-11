@@ -1,6 +1,16 @@
 import initialState from './initialState';
+import { reducer as getFbPageReducer } from './getFbPage';
+import { reducer as removeFbPageReducer } from './removeFbPage';
+import { reducer as addFbPageReducer } from './addFbPage';
+import { reducer as getAllFbPagesReducer } from './getAllFbPages';
+import { reducer as setReorderReducer } from './setReorder';
 
 const reducers = [
+  getFbPageReducer,
+  removeFbPageReducer,
+  addFbPageReducer,
+  getAllFbPagesReducer,
+  setReorderReducer,
 ];
 
 export default function reducer(state = initialState, action) {

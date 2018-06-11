@@ -29,33 +29,40 @@ export class DefaultPage extends Component {
     if (!user) {
       this.props.history.push('/user')
     }
-    
   }
 
   render() {
     return (
       <div className="home-default-page">
         <h3 className='title'>Page Analysis</h3>
-        <Tabs
-          activeKey={this.state.tab}
-          onSelect={this.switchTab.bind(this)}
-          id="controlled-tab-example"
-        >
-          <Tab eventKey={1} title="Facebook">
-            <FbContainer />
-          </Tab>
-          <Tab eventKey={2} title="Twitter">
-            <div className='tab-container'>
-ss            </div>
-          </Tab>
-          <Tab eventKey={3} title="Google">
-            <div className='tab-container'>
-ss            </div>
-          </Tab>
-        </Tabs>
+        <FbContainer />
       </div>
     );
   }
+//   render() {
+//     return (
+//       <div className="home-default-page">
+//         <h3 className='title'>Page Analysis</h3>
+//         <Tabs
+//           activeKey={this.state.tab}
+//           onSelect={this.switchTab.bind(this)}
+//           id="controlled-tab-example"
+//         >
+//           <Tab eventKey={1} title="Facebook">
+//             <FbContainer />
+//           </Tab>
+//           <Tab eventKey={2} title="Twitter">
+//             <div className='tab-container'>
+// ss            </div>
+//           </Tab>
+//           <Tab eventKey={3} title="Google">
+//             <div className='tab-container'>
+// ss            </div>
+//           </Tab>
+//         </Tabs>
+//       </div>
+//     );
+//   }
 }
 
 /* istanbul ignore next */
