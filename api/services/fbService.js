@@ -27,10 +27,9 @@ export const fbPage = dynogels.define('fb-page', {
 		id: joi.string().required(),
 		name: joi.string(),
 		about: joi.string(),
-		dailyLikes: joi.array().items(joi.object({
-			date: joi.string(),
-			count: joi.number()
-		}))
+		likeHistory: joi.any(),
+		order: joi.number(),
+		annotaion: joi.string()
 	}
 })
 
@@ -56,12 +55,12 @@ export default class fbService {
   	})
   }
 
-  updateAllFbPageDailyCount() {
+  updateAllFbPageDailyCount(userEmail) {
   	return new Promise(async (resolve, reject) => {
   		try {
-  			const dbData = await this.dbService.listAll(fbPage)
+  			const dbData = await this.dbService.listAllByHash(fbPage, userEmail)
 	  		const promiseItems = dbData.Items.map((dbItem) => {
-	  			return this.updateFbPageDailyCount(dbItem.attrs.id)
+	  			return this.updateFbPageDailyCount({userEmail, id: dbItem.attrs.id})
 	  		})
 	  		const updateResults = await Promise.all(promiseItems)
 
@@ -73,41 +72,26 @@ export default class fbService {
   	})
   }
 
-  updateFbPageDailyCount(id) {
+  updateFbPageDailyCount(data) {
   	return new Promise(async (resolve, reject) => {
   		try {
   			const page = await this.getFbPageById(id)
-		  	const dbItem = await this.dbService.getFromDb(fbPage, {id})
+		  	const dbItem = await this.dbService.getFromDb(fbPage, data)
 
 		  	// for testing purpose
 		  	const ranMonth = Math.floor(Math.random()*10)
 		  	const ranDay = Math.floor(Math.random()*10)
 		  	const date = new Date('2019/' + ranMonth + '/' + ranDay).toLocaleDateString()
-		  	let duplicate = false
-		  	for (var i = dbItem.dailyLikes.length - 1; i >= 0; i--) {
-		  		if (dbItem.dailyLikes[i].date === date) {
-		  			duplicate = false
-		  		}
-		  	}
-		  	if (!duplicate) {
-		  		dbItem.dailyLikes.push({
-		  			count: page.fan_count,
-		  			date
-		  		})
-		  		const updatedItem = await this.dbService.updateDb(fbPage, dbItem, {
-		  			expected: { 
-		  				id: {
-		  					Exists: true 
-		  				}
-		  			}
-		  		})
-		  		resolve(updatedItem)
-		  	} else {
-		  		reject({
-		  			type: 'ERROR_UPDATE_DATE_EXIST_' + fbPage.tableName().toUpperCase(),
-		  			message: 'date existsed in this fb page'
-		  		})
-		  	}
+	  		dbItem.likeHistory[date] = page.fan_count
+	  		const updatedItem = await this.dbService.updateDb(fbPage, dbItem, {
+	  			expected: { 
+	  				id: {
+	  					Exists: true 
+	  				}
+	  			}
+	  		})
+	  		resolve(updatedItem)
+
   		} catch (e) {
   			reject(e)
   		}
@@ -119,15 +103,14 @@ export default class fbService {
   	return new Promise(async (resolve, reject) => {
   		try {
 	  		let page = await this.getFbPageById(data.id)
+	  		let likeHistory = {}
+	  		likeHistory[new Date().toLocaleDateString().replace(/\//g, '-')] = page.fan_count
 	  		const savedPage = await this.dbService.saveToDb(fbPage, {
 	  			id: page.id,
 	  			userEmail: data.userEmail,
 	  			about: page.about,
 	  			name: page.name,
-	  			dailyLikes: [{
-	  				date: new Date().toLocaleDateString(),
-	  				count: page.fan_count
-	  			}]
+	  			likeHistory
 	  		})
 	  		resolve(savedPage)
 	  	} catch (e) {

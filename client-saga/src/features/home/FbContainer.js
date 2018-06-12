@@ -82,7 +82,7 @@ export class FbContainer extends Component {
               />
               <Button onClick={this.props.actions.getFbPage.bind(null, this.state.fbid)}>Submit</Button>         
             </FormGroup>
-            <DataTable setReorder={this.props.actions.setReorder} pages={this.props.home.pages} />
+            <DataTable setReorder={this.props.actions.setReorder} pages={this.props.home.pages} columns={this.props.home.columns} />
           </div>
           ) : (
             <FacebookLogin

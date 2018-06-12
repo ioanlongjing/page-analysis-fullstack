@@ -6,7 +6,8 @@ const initialState = {
   addFbPageError: null,
   getAllFbPagesPending: false,
   getAllFbPagesError: null,
-  pages: []
+  pages: [],
+  columns: []
 };
 
 export default initialState;
