@@ -44,6 +44,7 @@ export class FbContainer extends Component {
   }
 
   componentDidMount() {
+    console.log('tet')
     this.props.actions.getAllFbPages()
   }
 
