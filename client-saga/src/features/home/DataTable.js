@@ -6,14 +6,10 @@ const grid = 8;
 const getItemStyle = (isDragging, draggableStyle) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
-  padding: grid * 2,
-  display: "flex",
-  justifyContent: "space-between",
 
 
   // change background colour if dragging
   background: isDragging ? "lightgreen" : "white",
-  border: "1px solid grey",
 
   // styles we need to apply on draggables
   ...draggableStyle
@@ -47,11 +43,11 @@ export default class DataTable extends Component {
 
   render() {
     return (
-      <div>
+      <div className='data-container'>
         <div className='head'>
-          <div>name</div>
-          <div>order</div>
-          <div>annotation</div>
+          <div className='name'>name</div>
+          <div className='col'>order</div>
+          <div className='col'>annotation</div>
           {this.props.columns.map((column, index) => {
             if (index < 10) {
               return (
@@ -95,8 +91,7 @@ export default class DataTable extends Component {
                             if (index < 10) {
                               return (
                                 <div key={page.id + history.date} className='col'>
-                                  {history.date}
-                                  <br />
+
                                   {history.count}
                                 </div>
                               )
