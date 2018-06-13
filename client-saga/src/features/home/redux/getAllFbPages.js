@@ -59,7 +59,7 @@ export function* doGetAllFbPages() {
     return new Date(a) - new Date(b);
   });
 
-  for (var i = 0; i <= dateArray.length - 11; i--) {
+  for (var i = 0; i <= dateArray.length - 1; i++) {
     if (dateArray[i]) {
       columnArray.push(dateArray[i])
     }
