@@ -16,8 +16,8 @@ export const testCredential = {
 export const prodCredential = {
   apiVersion: '2016-04-18',
   region: 'ap-northeast-1',
-  accessKeyId: '',
-  secretAccessKey: ''
+  accessKeyId: 'AKIAJ4VHB4RJEWTUSZLQ',
+  secretAccessKey: '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'
 }
 
 let awsCredentials

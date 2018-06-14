@@ -67,9 +67,9 @@ exports.router = async (event) => {
 			console.log(e)
 			return failure(e)
 		}
-	} else if (event.resource === '/fb/pages/newCount' && event.httpMethod === 'PUT') {
+	} else if (event.resource === '/fb/pages/newCount/{email}' && event.httpMethod === 'PUT') {
 		try {
-			const pages = await FB.updateAllFbPageDailyCount(id)
+			const pages = await FB.updateAllFbPageDailyCount(unescape(userEmail))
 			return success(pages)
 		} catch (e) {
 			console.log(e)

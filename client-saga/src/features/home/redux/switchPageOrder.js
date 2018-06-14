@@ -7,6 +7,7 @@ import {
   HOME_SWITCH_PAGE_ORDER_DISMISS_ERROR,
 } from './constants';
 import axios from 'axios';
+import {getAllFbPages} from './getAllFbPages';
 
 export function switchPageOrder(source, destination) {
   // If need to pass args to saga, pass it with the begin action.
@@ -47,14 +48,8 @@ export function* doSwitchPageOrder(action) {
       order: pages[action.destination].order
     }
 
-    const destinationPage = {
-      userEmail: localStorage.getItem('userEmail'),
-      id: pages[action.destination].id,
-      order: pages[action.source].order
-    }
-
     // Do Ajax call or other async request here. delay(20) is just a placeholder.
-    res = yield call(updatefbPagesApi, [destinationPage, sourcePage]);
+    res = yield call(updatefbPagesApi, [sourcePage]);
   } catch (err) {
     yield put({
       type: HOME_SWITCH_PAGE_ORDER_FAILURE,
@@ -63,19 +58,16 @@ export function* doSwitchPageOrder(action) {
     return;
   }
 
-  // update local after update online
-  const tempOrder = pages[action.source].order
-  pages[action.source].order = pages[action.destination].order
-  pages[action.destination].order = tempOrder
-
-  const result = Array.from(pages);
-  const [removed] = result.splice(action.source, 1);
-  result.splice(action.destination, 0, removed);
+  // const result = Array.from(pages);
+  // const [removed] = result.splice(action.source, 1);
+  // result.splice(action.destination, 0, removed);
   // Dispatch success action out of try/catch so that render errors are not catched.
   yield put({
     type: HOME_SWITCH_PAGE_ORDER_SUCCESS,
-    data: result
+    // data: result
   });
+
+  yield put(getAllFbPages())
 }
 
 /*
@@ -104,7 +96,7 @@ export function reducer(state, action) {
         ...state,
         switchPageOrderPending: false,
         switchPageOrderError: null,
-        pages: action.data
+        // pages: action.data
       };
 
     case HOME_SWITCH_PAGE_ORDER_FAILURE:

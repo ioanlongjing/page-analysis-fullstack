@@ -37,7 +37,7 @@ export class FbContainer extends Component {
 
   updateUserFb(data) {
     this.props.actions.updateUser({
-      email: localStorage.getItem('userEmail'),
+      userEmail: localStorage.getItem('userEmail'),
       fbId: data.id,
       fbToken: data.accessToken
     })

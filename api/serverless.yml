@@ -94,7 +94,7 @@ functions:
     events:
       - http:
           method: PUT
-          path: fb/pages/newCount
+          path: fb/pages/newCount/{email}
           cors: true
   listAllFbPages:
     handler: fb_handler.router
@@ -103,5 +103,5 @@ functions:
           method: GET
           path: db/fb/pages/listAll/{email}
           cors: true
-resources:
-  Resources: ${file(offline/migrations/tables.yml)}
+# resources:
+#   Resources: ${file(offline/migrations/tables.yml)}

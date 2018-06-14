@@ -102,6 +102,9 @@ export default class fbService {
 	  			expected: { 
 	  				id: {
 	  					Exists: true 
+	  				},
+	  				userEmail: {
+	  					Exists: true
 	  				}
 	  			}
 	  		})
