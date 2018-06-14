@@ -29,7 +29,7 @@ export const fbPage = dynogels.define('fb-page', {
 		about: joi.string(),
 		likeHistory: joi.any(),
 		order: joi.number(),
-		annotaion: joi.string()
+		annotation: joi.string()
 	}
 })
 
@@ -52,6 +52,21 @@ export default class fbService {
 	      	})
 	      }
 	    })
+  	})
+  }
+
+  updatePages(pages) {
+  	return new Promise(async (resolve, reject) => {
+  		try {
+	  		const promiseItems = pages.map((page) => {
+	  			return this.dbService.updateDb(fbPage, page, { expected: { id: { Exists: true } } })
+	  		})
+	  		const updateResults = await Promise.all(promiseItems)
+
+	  		resolve(updateResults)
+  		} catch (e) {
+  			reject(e)
+  		}  	
   	})
   }
 

@@ -19,6 +19,15 @@ exports.router = async (event) => {
 			console.log(e)
 			return failure(e)
 		}
+	} else if (event.resource === '/db/fb/pages' && event.httpMethod === 'PUT') {
+		const body = JSON.parse(event.body)
+		try {
+			const page = await FB.updatePages(body)
+			return success(page)
+		} catch (e) {
+			console.log(e)
+			return failure(e)
+		}
 	} else if (event.resource === '/fb/page/{id}' && event.httpMethod === 'GET') {
 		if (!checkIdExists(event)) {
 			return failure({

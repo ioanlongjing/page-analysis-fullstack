@@ -49,7 +49,7 @@ export default class dbService {
   	})
   }
 
-  updateDb(dbObject, item, updateParams) {
+  updateDb(dbObject, item, updateParams = {}) {
   	return new Promise((resolve, reject) => {
   		dbObject.update(item, updateParams, (err, result) => {
 	  		if (err) {

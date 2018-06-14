@@ -54,6 +54,13 @@ functions:
           method: POST
           path: signin
           cors: true
+  updateFbPages:
+    handler: fb_handler.router
+    events:
+      - http:
+          method: PUT
+          path: db/fb/pages
+          cors: true
   getFromDb:
     handler: fb_handler.router
     events:

@@ -7,7 +7,11 @@ const initialState = {
   getAllFbPagesPending: false,
   getAllFbPagesError: null,
   pages: [],
-  columns: []
+  columns: [],
+  switchPageOrderPending: false,
+  switchPageOrderError: null,
+  submitChangePending: false,
+  submitChangeError: null
 };
 
 export default initialState;

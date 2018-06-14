@@ -14,7 +14,7 @@ export class FbContainer extends Component {
     super(props, context)
     this.state = {
       fbid: '',
-      modalShow: false
+      modalShow: false,
     }
   }
 
@@ -73,17 +73,24 @@ export class FbContainer extends Component {
 
           {this.props.user.user.fbToken ? (
           <div>
-            <FormGroup controlId='facebook'>
-              <ControlLabel>Please enter Facebook page id</ControlLabel>
-              <FormControl
-                type="text"
-                value={this.state.fbid}
-                placeholder="fb id"
-                onChange={this.handleFbIdChange.bind(this)}
-              />
-              <Button onClick={this.props.actions.getFbPage.bind(null, this.state.fbid)}>Submit</Button>         
-            </FormGroup>
-            <DataTable setReorder={this.props.actions.setReorder} pages={this.props.home.pages} columns={this.props.home.columns} />
+            <div className='fb-search'>
+              <FormGroup controlId='facebook'>
+                <ControlLabel>Please enter Facebook page id:</ControlLabel>
+                <FormControl
+                  className='search-box'
+                  type="text"
+                  value={this.state.fbid}
+                  placeholder="fb id"
+                  onChange={this.handleFbIdChange.bind(this)}
+                />
+                <Button className='search-button' onClick={this.props.actions.getFbPage.bind(null, this.state.fbid)}>Search</Button>         
+                
+              </FormGroup>
+            </div>
+            {this.props.home.pages.length > 0 && (
+              <DataTable submitChange={this.props.actions.submitChange} switchPageOrder={this.props.actions.switchPageOrder} updatePageAnnotation={this.props.actions.updatePageAnnotation} editing={this.state.editing} setReorder={this.props.actions.setReorder} pages={this.props.home.pages} columns={this.props.home.columns} />
+            )}
+            
           </div>
           ) : (
             <FacebookLogin

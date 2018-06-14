@@ -4,6 +4,8 @@ import { reducer as removeFbPageReducer } from './removeFbPage';
 import { reducer as addFbPageReducer } from './addFbPage';
 import { reducer as getAllFbPagesReducer } from './getAllFbPages';
 import { reducer as setReorderReducer } from './setReorder';
+import { reducer as switchPageOrderReducer } from './switchPageOrder';
+import { reducer as submitChangeReducer } from './submitChange';
 
 const reducers = [
   getFbPageReducer,
@@ -11,6 +13,8 @@ const reducers = [
   addFbPageReducer,
   getAllFbPagesReducer,
   setReorderReducer,
+  switchPageOrderReducer,
+  submitChangeReducer,
 ];
 
 export default function reducer(state = initialState, action) {
